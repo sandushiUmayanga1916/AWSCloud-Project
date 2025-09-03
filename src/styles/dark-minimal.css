@@ -1,6 +1,8 @@
-/* Dark Minimal Theme — scoped */
+@import './globals.css';
+@import './components.css';
+
+/* Theme variables scoped to the dark minimal theme */
 .app--dark-minimal {
-  /* Core palette */
   --bg-0: #0f1115;     /* page background (very dark graphite) */
   --bg-1: #12151b;     /* panel/card background */
   --bg-2: #171b24;     /* elevated/hover layer */
@@ -16,90 +18,31 @@
   --danger: #d36b6b;
   --info: #5f9ea0;
 
-  /* Radii & shadows */
-  --radius-card: 16px;
-  --radius-sm: 10px;
-  --shadow-soft: 0 6px 24px rgba(0,0,0,0.28);
-  --shadow-tiny: 0 1px 0 rgba(255,255,255,0.02), 0 1px 6px rgba(0,0,0,0.35);
-
-  /* Spacing scale (px) */
-  --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;
-  --s-5: 20px; --s-6: 24px; --s-7: 28px;  --s-8: 32px; --s-9: 40px;
-
-  /* Typography */
-  --font-display: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-body: "Questrial", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
-  /* Type scale (strict) */
-  --fs-display: 40px; /* dashboard hero numbers */
-  --fs-h1: 24px;
-  --fs-h2: 18px;
-  --fs-h3: 16px;
-  --fs-body: 14px;
-  --fs-caption: 12px;
-  --fs-micro: 10px;
-
-  /* Line heights */
-  --lh-tight: 1.1;
-  --lh-title: 1.25;
-  --lh-body: 1.5;
-
-  /* Transitions */
-  --ease-std: cubic-bezier(.2,.8,.2,1);
-  --t-fast: 160ms;
-  --t-med: 220ms;
-}
-
-/* Base + resets (scoped) */
-.app--dark-minimal {
   background: var(--bg-0);
   color: var(--text-0);
   font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
 }
 
-.app--dark-minimal * {
-  box-sizing: border-box;
-}
-
-.app--dark-minimal .text-muted { color: var(--text-2); }
-.app--dark-minimal .text-secondary { color: var(--text-1); }
-
-/* App Layout Grid */
-.app--dark-minimal .app-shell {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 0;
-  min-height: 100vh;
-  background: var(--bg-0);
-}
-
+/* Responsive overrides kept from old file */
 @media (max-width: 1100px) {
   .app--dark-minimal .app-shell { grid-template-columns: 76px 1fr; }
+  .app--dark-minimal .sidenav { width: 76px; padding: var(--s-6) var(--s-2); }
+  .app--dark-minimal .sidenav__title, .app--dark-minimal .sidenav__item span:last-child { display: none; }
+  .app--dark-minimal .sidenav__brand { grid-template-columns: 40px 0 28px; }
 }
 
-/* Card System */
-.app--dark-minimal .card {
-  background: var(--bg-1);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-tiny);
-  padding: var(--s-5);
-  transition: all var(--t-med) var(--ease-std);
+@media (max-width: 768px) {
+  .app--dark-minimal .grid--auto { grid-template-columns: 1fr; }
+  .app--dark-minimal .form-row { grid-template-columns: 1fr; }
+  .app--dark-minimal .card { padding: var(--s-4); }
+  .app--dark-minimal .kpi .kpi__value { font-size: 28px; }
 }
 
-.app--dark-minimal .card:hover {
-  box-shadow: var(--shadow-soft);
-  transform: translateY(-2px);
+@media (max-width: 480px) {
+  .app--dark-minimal .modal { margin: var(--s-2); max-width: calc(100vw - var(--s-4)); }
+  .app--dark-minimal .kpi .kpi__value { font-size: 24px; }
 }
 
-.app--dark-minimal .divider {
-  height: 1px;
-  background: var(--border-subtle);
-  margin: var(--s-4) 0;
-}
 
 /* Grid System */
 .app--dark-minimal .grid {
@@ -190,8 +133,8 @@
 }
 
 .app--dark-minimal .btn--success {
-  background: rgba(111, 180, 143, .2);
-  border-color: var(--success);
+  background: rgba(20, 126, 69, 0.2);
+  border-color: rgba(21, 86, 51, 0.609);
   color: var(--success);
 }
 

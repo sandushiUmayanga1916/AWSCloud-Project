@@ -28,13 +28,12 @@ const AlertsView = ({ alerts }) => {
         </div>
         <button onClick={refreshData} className="btn btn--primary">
           <span className="material-symbols-rounded">refresh</span>
-          Refresh
         </button>
       </div>
       
       {/* Alert Summary Cards */}
-      <div className="grid grid--auto" style={{ marginBottom: 'var(--s-6)' }}>
-        <div className="col-4">
+      <div className="alerts-cards" style={{ marginBottom: 'var(--s-6)' }}>
+        <div>
           <div className="card card--kpi">
             <div className="kpi">
               <div className="kpi__label">Critical Alerts</div>
@@ -44,7 +43,7 @@ const AlertsView = ({ alerts }) => {
             </div>
           </div>
         </div>
-        <div className="col-4">
+        <div>
           <div className="card card--kpi">
             <div className="kpi">
               <div className="kpi__label">Unresolved</div>
@@ -54,7 +53,7 @@ const AlertsView = ({ alerts }) => {
             </div>
           </div>
         </div>
-        <div className="col-4">
+        <div>
           <div className="card card--kpi">
             <div className="kpi">
               <div className="kpi__label">Total Today</div>
@@ -81,10 +80,6 @@ const AlertsView = ({ alerts }) => {
                 key={alert.alert_id} 
                 className="card"
                 style={{
-                  borderLeft: `4px solid ${
-                    alert.severity_level === 'high' ? 'var(--danger)' :
-                    alert.severity_level === 'medium' ? 'var(--warning)' : 'var(--info)'
-                  }`,
                   opacity: alert.resolved ? 0.7 : 1
                 }}
               >
@@ -115,7 +110,7 @@ const AlertsView = ({ alerts }) => {
                       color: alert.severity_level === 'high' ? 'var(--danger)' :
                              alert.severity_level === 'medium' ? 'var(--warning)' : 'var(--accent)'
                     }}>
-                      {alert.severity_level === 'high' ? 'emergency' : 'warning'}
+                      {alert.severity_level === 'high' ? 'warning' : 'warning'}
                     </span>
                     {alert.issue_detected}
                   </div>

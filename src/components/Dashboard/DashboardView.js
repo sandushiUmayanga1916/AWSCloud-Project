@@ -34,7 +34,7 @@ const DashboardView = ({ stats, alerts, onNavigate, patients }) => {
       flexDirection: 'column',
       overflow: 'hidden',
       boxSizing: 'border-box',
-      width: '100%',
+      width: '80%',
       maxWidth: '1400px',
       margin: '0 auto'
     }}>

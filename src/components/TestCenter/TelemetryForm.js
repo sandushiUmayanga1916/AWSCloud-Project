@@ -166,33 +166,27 @@ const TelemetryForm = () => {
           border: '1px solid var(--border-subtle)',
           marginBottom: 'var(--s-4)'
         }}>
-          <h4 style={{ 
-            color: 'var(--text-0)', 
-            marginBottom: 'var(--s-3)', 
-            fontSize: 'var(--fs-h3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--s-2)'
-          }}>
-            <span className="material-symbols-rounded" style={{ fontSize: '18px', color: 'var(--warning)' }}>
-              notifications_active
-            </span>
-            Alert Triggers
-          </h4>
-          <div style={{ display: 'grid', gap: 'var(--s-2)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+              gap: 'var(--s-4)',
+              alignItems: 'start'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-4)' }}>
               <span className="badge badge--danger" style={{ fontSize: 'var(--fs-micro)' }}>HIGH</span>
               <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
-                Heart Rate &lt;50 or &gt;120 bpm
+                Rate &lt;50 or &gt;120 bpm
               </span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-4)' }}>
               <span className="badge badge--danger" style={{ fontSize: 'var(--fs-micro)' }}>HIGH</span>
               <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
                 Oxygen Level &lt;90%
               </span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-4)' }}>
               <span className="badge badge--warning" style={{ fontSize: 'var(--fs-micro)' }}>MEDIUM</span>
               <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
                 Oxygen Level 90-94%

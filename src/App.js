@@ -92,7 +92,7 @@ const MainContent = () => {
           </div>
         </aside>
 
-        <main className="main-content" style={{ padding: 'var(--s-6)', overflow: 'auto', minHeight: '100vh' }}>
+        <main className="main-content" style={{ padding: 'var(--s-6)', overflow: 'auto', minHeight: '100vh', minWidth: '80vw' }}>
           {/* Error Display */}
           {error && (
             <div className="alert alert--danger">
