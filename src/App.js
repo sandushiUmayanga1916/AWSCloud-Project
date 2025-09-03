@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { AppProvider } from './context/AppContext';
-import Header from './components/Common/Header';
-import Navigation from './components/Common/Navigation';
 import LoadingSpinner from './components/Common/LoadingSpinner';
 import ErrorAlert from './components/Common/ErrorAlert';
 import DashboardView from './components/Dashboard/DashboardView';
 import { useAppContext } from './context/AppContext';
 import './App.css';
+import './styles/dark-minimal.css';
 
 // Import other views (you'll need to create these similar to the dashboard)
 const PatientsView = React.lazy(() => import('./components/Patients/PatientsView'));
@@ -66,38 +65,52 @@ const MainContent = () => {
   };
 
   return (
-    <div className="app">
-      <Header />
-      
-      <main className="main-content">
-        {/* Error Display */}
-        {error && (
-          <ErrorAlert 
-            message={error} 
-            onClose={clearError}
-          />
-        )}
-        
-        {/* Navigation */}
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        {/* Main Content */}
-        <div className="content-area">
-          {renderContent()}
-        </div>
-        
-        {/* Footer */}
-        <footer className="footer">
-          <div className="footer-content">
-            <h6>🏥 MediSys Diagnostics Ltd.</h6>
-            <p>
-              Real-time Patient Monitoring Dashboard System
-              <span> • </span>
-              <span className="system-status">System Online</span>
-            </p>
+    <div className="app app--dark-minimal">
+      <div className="app-shell">
+        <aside className="sidenav ghost-scroll">
+          <div className="sidenav__brand">
+            <div className="sidenav__title">MediSys</div>
           </div>
-        </footer>
-      </main>
+
+          <div className="sidenav__section">
+            <div className={`sidenav__item ${activeTab === 'dashboard' ? 'is-active' : ''}`} onClick={() => setActiveTab('dashboard')}>
+              <span className="material-symbols-rounded">dashboard</span>
+              <span>Dashboard</span>
+            </div>
+            <div className={`sidenav__item ${activeTab === 'patients' ? 'is-active' : ''}`} onClick={() => setActiveTab('patients')}>
+              <span className="material-symbols-rounded">folder</span>
+              <span>Patients</span>
+            </div>
+            <div className={`sidenav__item ${activeTab === 'alerts' ? 'is-active' : ''}`} onClick={() => setActiveTab('alerts')}>
+              <span className="material-symbols-rounded">analytics</span>
+              <span>Alerts</span>
+            </div>
+            <div className={`sidenav__item ${activeTab === 'test' ? 'is-active' : ''}`} onClick={() => setActiveTab('test')}>
+              <span className="material-symbols-rounded">settings</span>
+              <span>Test Center</span>
+            </div>
+          </div>
+        </aside>
+
+        <main className="main-content" style={{ padding: 'var(--s-6)', overflow: 'auto', minHeight: '100vh' }}>
+          {/* Error Display */}
+          {error && (
+            <div className="alert alert--danger">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>{error}</span>
+                <button className="btn btn--icon" onClick={clearError} style={{ background: 'none', border: 'none' }}>
+                  <span className="material-symbols-rounded">close</span>
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Main Content */}
+          <div className="content-area">
+            {renderContent()}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

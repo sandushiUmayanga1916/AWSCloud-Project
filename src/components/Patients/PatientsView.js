@@ -56,9 +56,10 @@ const PatientsView = ({ patients }) => {
 
   if (loading) {
     return (
-      <div className="patients-view">
-        <h2>Patients</h2>
-        <div className="patients-content">
+      <div style={{ padding: 'var(--s-6) 0' }}>
+        <h1>Patients</h1>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
           <p>Loading patients...</p>
         </div>
       </div>
@@ -66,25 +67,32 @@ const PatientsView = ({ patients }) => {
   }
 
   return (
-    <div className="patients-view">
-      <div className="patients-header">
-        <h2>Patients ({patients?.length || 0})</h2>
-        <button onClick={handleAddPatient} className="add-patient-btn">
-          + Add New Patient
+    <div style={{ padding: 'var(--s-6) 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--s-6)' }}>
+        <div>
+          <h1>Patients ({patients?.length || 0})</h1>
+          <p className="text-secondary">Manage patient records and monitor vitals</p>
+        </div>
+        <button onClick={handleAddPatient} className="btn btn--success">
+          <span className="material-symbols-rounded">person_add</span>
+          Add New Patient
         </button>
       </div>
       
-      <div className="patients-content">
+      <div>
         {!patients || patients.length === 0 ? (
-          <div className="no-patients">
-            <p>No patients found.</p>
-            <button onClick={handleAddPatient} className="add-first-patient-btn">
+          <div className="empty-state">
+            <span className="material-symbols-rounded">group</span>
+            <h3>No Patients Found</h3>
+            <p>Start by adding your first patient to begin monitoring</p>
+            <button onClick={handleAddPatient} className="btn btn--primary">
+              <span className="material-symbols-rounded">person_add</span>
               Add Your First Patient
             </button>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="patients-table">
+          <div className="card" style={{ overflow: 'hidden' }}>
+            <table className="table">
               <thead>
                 <tr>
                   <th>Patient ID</th>
@@ -101,39 +109,56 @@ const PatientsView = ({ patients }) => {
               </thead>
               <tbody>
                 {patients.map(patient => (
-                  <tr key={patient.patient_id} className={patient.connection_status === 'Offline' ? 'patient-offline' : ''}>
-                    <td>{patient.patient_id}</td>
+                  <tr key={patient.patient_id}>
+                    <td style={{ fontFamily: 'var(--font-display)', fontWeight: '600', color: 'var(--accent)' }}>
+                      {patient.patient_id}
+                    </td>
                     <td>{patient.name}</td>
-                    <td>{patient.age}</td>
+                    <td className="numeric">{patient.age}</td>
                     <td>{patient.gender}</td>
                     <td>{patient.medical_conditions}</td>
-                    <td className={patient.heart_rate > 100 ? 'critical' : patient.heart_rate < 60 ? 'warning' : 'normal'}>
-                      {patient.heart_rate || '--'} {patient.heart_rate ? 'bpm' : ''}
+                    <td className="numeric" style={{ 
+                      color: patient.heart_rate > 100 ? 'var(--danger)' : 
+                             patient.heart_rate < 60 ? 'var(--warning)' : 
+                             'var(--success)'
+                    }}>
+                      {patient.heart_rate || '--'}
+                      {patient.heart_rate && <span style={{ fontSize: '12px', color: 'var(--text-2)', marginLeft: '4px' }}>bpm</span>}
                     </td>
-                    <td className={patient.oxygen_level < 90 ? 'critical' : patient.oxygen_level < 95 ? 'warning' : 'normal'}>
-                      {patient.oxygen_level || '--'}{patient.oxygen_level ? '%' : ''}
+                    <td className="numeric" style={{ 
+                      color: patient.oxygen_level < 90 ? 'var(--danger)' : 
+                             patient.oxygen_level < 95 ? 'var(--warning)' : 
+                             'var(--success)'
+                    }}>
+                      {patient.oxygen_level || '--'}
+                      {patient.oxygen_level && <span style={{ fontSize: '12px', color: 'var(--text-2)', marginLeft: '1px' }}>%</span>}
                     </td>
-                    <td>{patient.last_reading ? new Date(patient.last_reading).toLocaleString() : 'No data'}</td>
+                    <td style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)' }}>
+                      {patient.last_reading ? new Date(patient.last_reading).toLocaleString() : 'No data'}
+                    </td>
                     <td>
-                      <span className={`status-badge ${patient.connection_status.toLowerCase()}`}>
+                      <span className={`badge badge--${patient.connection_status.toLowerCase() === 'online' ? 'success' : 
+                                                        patient.connection_status.toLowerCase() === 'offline' ? 'danger' : 'warning'}`}>
                         {patient.connection_status}
                       </span>
                     </td>
                     <td>
-                      <div className="action-buttons">
+                      <div style={{ display: 'flex', gap: 'var(--s-1)' }}>
                         <button 
                           onClick={() => handleEditPatient(patient)}
-                          className="edit-btn"
+                          className="btn btn--icon"
                           title="Edit Patient"
+                          style={{ background: 'rgba(95, 114, 144, 0.1)', border: '1px solid rgba(95, 114, 144, 0.2)' }}
                         >
-                          ✏️
+                          <span className="material-symbols-rounded" style={{ fontSize: '16px' }}>edit</span>
                         </button>
                         <button 
                           onClick={() => handleDeletePatient(patient)}
-                          className="delete-btn"
+                          className="btn btn--icon"
                           title="Delete Patient"
+                          style={{ background: 'rgba(211, 107, 107, 0.1)', border: '1px solid rgba(211, 107, 107, 0.2)' }}
                         >
-                          🗑️
+                          <span className="material-symbols-rounded" style={{ fontSize: '16px', color: 'var(--danger)' }}>delete</span>
                         </button>
                       </div>
                     </td>
@@ -157,20 +182,37 @@ const PatientsView = ({ patients }) => {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="delete-confirm-overlay">
-          <div className="delete-confirm-modal">
-            <h3>Confirm Delete</h3>
-            <p>
-              Are you sure you want to delete patient <strong>{deleteConfirm.name}</strong> ({deleteConfirm.patient_id})?
-            </p>
-            <p className="warning-text">
-              This will also delete all associated telemetry data and alerts.
-            </p>
-            <div className="confirm-actions">
-              <button onClick={() => setDeleteConfirm(null)} className="cancel-btn">
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3 style={{ color: 'var(--danger)' }}>
+                <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
+                  warning
+                </span>
+                Confirm Delete
+              </h3>
+              <button 
+                onClick={() => setDeleteConfirm(null)} 
+                className="btn btn--icon"
+                style={{ background: 'none', border: 'none' }}
+              >
+                <span className="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Are you sure you want to delete patient <strong>{deleteConfirm.name}</strong> ({deleteConfirm.patient_id})?
+              </p>
+              <div className="alert alert--warning" style={{ margin: 'var(--s-4) 0' }}>
+                This will permanently delete all associated telemetry data and alerts.
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button onClick={() => setDeleteConfirm(null)} className="btn">
                 Cancel
               </button>
-              <button onClick={confirmDelete} className="confirm-delete-btn">
+              <button onClick={confirmDelete} className="btn btn--danger">
+                <span className="material-symbols-rounded">delete_forever</span>
                 Delete Patient
               </button>
             </div>

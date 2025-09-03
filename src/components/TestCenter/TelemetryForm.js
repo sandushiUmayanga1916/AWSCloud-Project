@@ -72,22 +72,24 @@ const TelemetryForm = () => {
   };
 
   return (
-    <div className="telemetry-form-container">
-      <h3>Send Live Telemetry Data</h3>
-      <p className="form-description">
-        Simulate sending health data from wearable devices. Critical values will trigger email alerts.
-      </p>
+    <div>
+      <h3 style={{ marginBottom: 'var(--s-4)' }}>
+        <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
+          sensors
+        </span>
+        Send Live Telemetry Data
+      </h3>
 
-      <form onSubmit={handleSubmit} className="telemetry-form">
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="patient_id">Patient ID</label>
+          <label htmlFor="patient_id">Patient ID *</label>
           <select
             id="patient_id"
             name="patient_id"
             value={formData.patient_id}
             onChange={handleChange}
             required
-            className="form-control"
+            className="input"
           >
             <option value="">Select Patient</option>
             {patients && patients.length > 0 ? (
@@ -104,7 +106,7 @@ const TelemetryForm = () => {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="heart_rate">Heart Rate (bpm)</label>
+            <label htmlFor="heart_rate">Heart Rate (bpm) *</label>
             <input
               type="number"
               id="heart_rate"
@@ -114,14 +116,16 @@ const TelemetryForm = () => {
               min="30"
               max="200"
               required
-              className="form-control"
+              className="input"
               placeholder="e.g., 75"
             />
-            <small className="form-text">Normal: 60-100 bpm</small>
+            <small style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)', marginTop: 'var(--s-1)', display: 'block' }}>
+              Normal: 60-100 bpm
+            </small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="oxygen_level">Oxygen Level (%)</label>
+            <label htmlFor="oxygen_level">Oxygen Level (%) *</label>
             <input
               type="number"
               id="oxygen_level"
@@ -131,10 +135,12 @@ const TelemetryForm = () => {
               min="70"
               max="100"
               required
-              className="form-control"
+              className="input"
               placeholder="e.g., 98"
             />
-            <small className="form-text">Normal: 95-100%</small>
+            <small style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)', marginTop: 'var(--s-1)', display: 'block' }}>
+              Normal: 95-100%
+            </small>
           </div>
         </div>
 
@@ -145,7 +151,7 @@ const TelemetryForm = () => {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="form-control"
+            className="input"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -153,27 +159,74 @@ const TelemetryForm = () => {
           </select>
         </div>
 
-        <div className="alert-triggers-info">
-          <h4>Alert Triggers:</h4>
-          <ul>
-            <li><strong>High Priority:</strong> Heart Rate &lt;50 or &gt;120 bpm</li>
-            <li><strong>High Priority:</strong> Oxygen Level &lt;90%</li>
-            <li><strong>Medium Priority:</strong> Oxygen Level 90-94%</li>
-          </ul>
+        <div style={{
+          background: 'var(--bg-2)',
+          padding: 'var(--s-4)',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border-subtle)',
+          marginBottom: 'var(--s-4)'
+        }}>
+          <h4 style={{ 
+            color: 'var(--text-0)', 
+            marginBottom: 'var(--s-3)', 
+            fontSize: 'var(--fs-h3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--s-2)'
+          }}>
+            <span className="material-symbols-rounded" style={{ fontSize: '18px', color: 'var(--warning)' }}>
+              notifications_active
+            </span>
+            Alert Triggers
+          </h4>
+          <div style={{ display: 'grid', gap: 'var(--s-2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+              <span className="badge badge--danger" style={{ fontSize: 'var(--fs-micro)' }}>HIGH</span>
+              <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
+                Heart Rate &lt;50 or &gt;120 bpm
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+              <span className="badge badge--danger" style={{ fontSize: 'var(--fs-micro)' }}>HIGH</span>
+              <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
+                Oxygen Level &lt;90%
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-2)' }}>
+              <span className="badge badge--warning" style={{ fontSize: 'var(--fs-micro)' }}>MEDIUM</span>
+              <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-1)' }}>
+                Oxygen Level 90-94%
+              </span>
+            </div>
+          </div>
         </div>
 
         {message && (
-          <div className={`form-message ${message.type}`}>
+          <div className={`alert alert--${message.type === 'success' ? 'success' : 'danger'}`} style={{ marginBottom: 'var(--s-4)' }}>
+            <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
+              {message.type === 'success' ? 'check_circle' : 'error'}
+            </span>
             {message.text}
           </div>
         )}
 
         <button 
           type="submit" 
-          className="submit-btn"
+          className="btn btn--success"
           disabled={submitting}
+          style={{ width: '100%' }}
         >
-          {submitting ? 'Sending...' : 'Send Telemetry Data'}
+          {submitting ? (
+            <>
+              <div className="spinner" style={{ width: '16px', height: '16px' }}></div>
+              Sending...
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-rounded">send</span>
+              Send Telemetry Data
+            </>
+          )}
         </button>
       </form>
     </div>

@@ -6,9 +6,10 @@ const AlertsView = ({ alerts }) => {
 
   if (loading) {
     return (
-      <div className="alerts-view">
-        <h2>Alerts</h2>
-        <div className="alerts-content">
+      <div style={{ padding: 'var(--s-6) 0' }}>
+        <h1>Alerts</h1>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
           <p>Loading alerts...</p>
         </div>
       </div>
@@ -19,64 +20,131 @@ const AlertsView = ({ alerts }) => {
   const unresolvedAlerts = alerts?.filter(alert => !alert.resolved) || [];
 
   return (
-    <div className="alerts-view">
-      <div className="alerts-header">
-        <h2>Alerts ({alerts?.length || 0})</h2>
-        <button onClick={refreshData} className="refresh-btn">
+    <div style={{ padding: 'var(--s-6) 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--s-6)' }}>
+        <div>
+          <h1>Alerts ({alerts?.length || 0})</h1>
+          <p className="text-secondary">Monitor and manage patient health alerts</p>
+        </div>
+        <button onClick={refreshData} className="btn btn--primary">
+          <span className="material-symbols-rounded">refresh</span>
           Refresh
         </button>
       </div>
       
-      <div className="alerts-summary">
-        <div className="alert-stat">
-          <span className="stat-label">Critical:</span>
-          <span className="stat-value critical">{criticalAlerts.length}</span>
+      {/* Alert Summary Cards */}
+      <div className="grid grid--auto" style={{ marginBottom: 'var(--s-6)' }}>
+        <div className="col-4">
+          <div className="card card--kpi">
+            <div className="kpi">
+              <div className="kpi__label">Critical Alerts</div>
+              <div className="kpi__value" style={{ color: 'var(--danger)' }}>
+                {criticalAlerts.length}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="alert-stat">
-          <span className="stat-label">Unresolved:</span>
-          <span className="stat-value warning">{unresolvedAlerts.length}</span>
+        <div className="col-4">
+          <div className="card card--kpi">
+            <div className="kpi">
+              <div className="kpi__label">Unresolved</div>
+              <div className="kpi__value" style={{ color: 'var(--warning)' }}>
+                {unresolvedAlerts.length}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="alert-stat">
-          <span className="stat-label">Total Today:</span>
-          <span className="stat-value">{alerts?.length || 0}</span>
+        <div className="col-4">
+          <div className="card card--kpi">
+            <div className="kpi">
+              <div className="kpi__label">Total Today</div>
+              <div className="kpi__value" style={{ color: 'var(--text-0)' }}>
+                {alerts?.length || 0}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="alerts-content">
+      {/* Alerts List */}
+      <div>
         {!alerts || alerts.length === 0 ? (
-          <div className="no-alerts">
-            <p>No alerts at this time.</p>
+          <div className="empty-state">
+            <span className="material-symbols-rounded">notifications</span>
+            <h3>No Alerts Found</h3>
+            <p>All systems are running normally</p>
           </div>
         ) : (
-          <div className="alerts-list">
+          <div style={{ display: 'grid', gap: 'var(--s-4)' }}>
             {alerts.map(alert => (
               <div 
                 key={alert.alert_id} 
-                className={`alert-item ${alert.severity_level} ${alert.resolved ? 'resolved' : 'unresolved'}`}
+                className="card"
+                style={{
+                  borderLeft: `4px solid ${
+                    alert.severity_level === 'high' ? 'var(--danger)' :
+                    alert.severity_level === 'medium' ? 'var(--warning)' : 'var(--info)'
+                  }`,
+                  opacity: alert.resolved ? 0.7 : 1
+                }}
               >
-                <div className="alert-header">
-                  <div className="alert-info">
-                    <span className="patient-id">{alert.patient_id}</span>
-                    <span className="patient-name">{alert.patient_name}</span>
-                    <span className={`severity-badge ${alert.severity_level}`}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--s-3)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s-3)' }}>
+                    <span style={{ fontFamily: 'var(--font-display)', fontWeight: '600', color: 'var(--accent)' }}>
+                      {alert.patient_id}
+                    </span>
+                    <span>{alert.patient_name}</span>
+                    <span className={`badge badge--${
+                      alert.severity_level === 'high' ? 'danger' : 
+                      alert.severity_level === 'medium' ? 'warning' : 'success'
+                    }`}>
                       {alert.severity_level}
                     </span>
                   </div>
-                  <div className="alert-time">
+                  <div style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)' }}>
                     {new Date(alert.datetime).toLocaleString()}
                   </div>
                 </div>
-                <div className="alert-body">
-                  <div className="issue-detected">{alert.issue_detected}</div>
+                
+                <div style={{ marginBottom: 'var(--s-3)' }}>
+                  <div style={{ fontWeight: '600', color: 'var(--text-0)', marginBottom: 'var(--s-2)' }}>
+                    <span className="material-symbols-rounded" style={{ 
+                      verticalAlign: 'middle', 
+                      marginRight: '8px',
+                      fontSize: '18px',
+                      color: alert.severity_level === 'high' ? 'var(--danger)' :
+                             alert.severity_level === 'medium' ? 'var(--warning)' : 'var(--accent)'
+                    }}>
+                      {alert.severity_level === 'high' ? 'emergency' : 'warning'}
+                    </span>
+                    {alert.issue_detected}
+                  </div>
                   {alert.message && (
-                    <div className="alert-message">{alert.message}</div>
+                    <div style={{ fontSize: 'var(--fs-body)', color: 'var(--text-1)' }}>
+                      {alert.message}
+                    </div>
                   )}
                 </div>
-                <div className="alert-status">
+                
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {alert.resolved ? (
-                    <span className="status-resolved">✓ Resolved</span>
+                    <span className="chip" style={{ 
+                      background: 'rgba(111, 180, 143, 0.2)', 
+                      border: '1px solid var(--success)',
+                      color: 'var(--success)'
+                    }}>
+                      <span className="material-symbols-rounded" style={{ fontSize: '16px' }}>check_circle</span>
+                      Resolved
+                    </span>
                   ) : (
-                    <span className="status-unresolved">⚠ Unresolved</span>
+                    <span className="chip" style={{ 
+                      background: 'rgba(216, 163, 84, 0.2)', 
+                      border: '1px solid var(--warning)',
+                      color: 'var(--warning)'
+                    }}>
+                      <span className="material-symbols-rounded" style={{ fontSize: '16px' }}>pending</span>
+                      Unresolved
+                    </span>
                   )}
                 </div>
               </div>
