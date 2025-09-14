@@ -1,8 +1,7 @@
 import React from 'react';
 
 const Navigation = ({ activeTab, setActiveTab }) => {
-  const handleTabClick = (e, tabName) => {
-    e.preventDefault();
+  const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
@@ -10,40 +9,36 @@ const Navigation = ({ activeTab, setActiveTab }) => {
     <nav className="navigation">
       <ul>
         <li>
-          <a 
-            href="#" 
+          <button
             className={activeTab === 'dashboard' ? 'active' : ''}
-            onClick={(e) => handleTabClick(e, 'dashboard')}
+            onClick={() => handleTabClick('dashboard')}
           >
             Dashboard
-          </a>
+          </button>
         </li>
         <li>
-          <a 
-            href="#" 
+          <button
             className={activeTab === 'patients' ? 'active' : ''}
-            onClick={(e) => handleTabClick(e, 'patients')}
+            onClick={() => handleTabClick('patients')}
           >
-            Patients
-          </a>
+            Patients Details
+          </button>
         </li>
         <li>
-          <a 
-            href="#" 
+          <button
             className={activeTab === 'alerts' ? 'active' : ''}
-            onClick={(e) => handleTabClick(e, 'alerts')}
+            onClick={() => handleTabClick('alerts')}
           >
-            Alerts
-          </a>
+            Patients Alerts
+          </button>
         </li>
         <li>
-          <a 
-            href="#" 
+          <button
             className={activeTab === 'test' ? 'active' : ''}
-            onClick={(e) => handleTabClick(e, 'test')}
+            onClick={() => handleTabClick('test')}
           >
-            Test Center
-          </a>
+            Testing
+          </button>
         </li>
       </ul>
     </nav>

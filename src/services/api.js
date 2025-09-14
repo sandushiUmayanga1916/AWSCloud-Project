@@ -1,5 +1,5 @@
 // Base API configuration
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://3c57zl4y35.execute-api.eu-north-1.amazonaws.com/prod';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://xw5lves6w5.execute-api.eu-north-1.amazonaws.com/prod';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',

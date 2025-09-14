@@ -1,22 +1,35 @@
 import React from 'react';
 
-const StatCard = ({ 
-  title, 
-  value, 
-  icon, 
-  color = 'primary', 
+interface StatCardProps {
+  title: string;
+  value: any;
+  icon: string;
+  color?: string;
+  subtitle?: string;
+  trend?: number;
+  onClick?: () => void;
+  className?: string;
+}
+
+const StatCard = ({
+  title,
+  value,
+  icon,
+  color = 'primary',
   subtitle,
   trend,
   onClick,
-  className = ''
-}) => {
-  const cardClasses = `card bg-${color} text-white h-100 ${onClick ? 'cursor-pointer' : ''} ${className}`;
+  className = '',
+}: StatCardProps) => {
+  const cardClasses = `card bg-${color} text-white h-100 ${
+    onClick ? 'cursor-pointer' : ''
+  } ${className}`;
 
   const handleClick = () => {
     if (onClick) onClick();
   };
 
-  const formatValue = (val) => {
+  const formatValue = (val: any) => {
     if (typeof val === 'number') {
       return val.toLocaleString();
     }
@@ -25,10 +38,10 @@ const StatCard = ({
 
   return (
     <div className="col-lg-3 col-md-6 mb-3">
-      <div 
+      <div
         className={cardClasses}
         onClick={handleClick}
-        role={onClick ? "button" : undefined}
+        role={onClick ? 'button' : undefined}
         tabIndex={onClick ? 0 : undefined}
       >
         <div className="card-body">
@@ -42,9 +55,13 @@ const StatCard = ({
               {subtitle && (
                 <small className="opacity-75 d-block">{subtitle}</small>
               )}
-              {trend && (
+              {trend !== undefined && (
                 <small className="opacity-75 d-block">
-                  <i className={`fas ${trend > 0 ? 'fa-arrow-up' : 'fa-arrow-down'} me-1`}></i>
+                  <i
+                    className={`fas ${
+                      trend > 0 ? 'fa-arrow-up' : 'fa-arrow-down'
+                    } me-1`}
+                  ></i>
                   {Math.abs(trend)}% from yesterday
                 </small>
               )}

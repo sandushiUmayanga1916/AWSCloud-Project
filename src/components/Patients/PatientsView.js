@@ -56,184 +56,162 @@ const PatientsView = ({ patients }) => {
 
   if (loading) {
     return (
-      <div style={{ padding: 'var(--s-6) 0' }}>
+      <div style={{ padding: '40px', color: '#fff' }}>
         <h1>Patients</h1>
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading patients...</p>
-        </div>
+        <p>Loading patients...</p>
       </div>
     );
   }
 
   return (
-    <div className={`patients-view ${showForm ? 'has-inline-form' : ''}`} style={{ padding: 'var(--s-6) 0' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--s-6)' }}>
+    <div style={{ padding: '20px', minHeight: '100vh', color: '#fff', fontFamily: 'Arial, sans-serif' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1>Patients ({patients?.length || 0})</h1>
-          <p className="text-secondary">Manage patient records and monitor vitals</p>
+          <h1 style={{ margin: 0 }}>Patients ({patients?.length || 0})</h1>
+          <p style={{ color: 'black', margin: 0 }}>Manage patient records and monitor vitals</p>
         </div>
-        {showForm ? (
-          <button onClick={() => setShowForm(false)} className="btn btn--primary">
-            <span className="material-symbols-rounded">list</span>
-            View Patient List
-          </button>
-        ) : (
-          <button onClick={handleAddPatient} className="btn btn--success">
-            <span className="material-symbols-rounded">person_add</span>
-            Add New Patient
-          </button>
-        )}
-      </div>
-      
-      <div>
-        {!patients || patients.length === 0 ? (
-          <div className="empty-state">
-            <span className="material-symbols-rounded">group</span>
-            <h3>No Patients Found</h3>
-            <p>Start by adding your first patient to begin monitoring</p>
-            <button onClick={handleAddPatient} className="btn btn--primary">
-              <span className="material-symbols-rounded">person_add</span>
-              Add Your First Patient
-            </button>
-          </div>
-        ) : (
-          <>
-            {showForm ? (
-              // render the form inline in place of the table
-              <PatientForm
-                patient={editingPatient}
-                onSave={handleSavePatient}
-                onCancel={handleCancelForm}
-                isEditing={!!editingPatient}
-                inline={true}
-              />
-            ) : (
-              <div className="card" style={{ overflow: 'hidden' }}>
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Patient ID</th>
-                      <th>Name</th>
-                      <th>Age</th>
-                      <th>Gender</th>
-                      <th>Medical Conditions</th>
-                      <th>Heart Rate</th>
-                      <th>Oxygen Level</th>
-                      <th>Last Reading</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {patients.map(patient => (
-                      <tr key={patient.patient_id}>
-                        <td style={{ fontFamily: 'var(--font-display)', fontWeight: '600', color: 'var(--accent)' }}>
-                          {patient.patient_id}
-                        </td>
-                        <td>{patient.name}</td>
-                        <td className="numeric">{patient.age}</td>
-                        <td>{patient.gender}</td>
-                        <td>{patient.medical_conditions}</td>
-                        <td className="numeric" style={{ 
-                          color: patient.heart_rate > 100 ? 'var(--danger)' : 
-                                 patient.heart_rate < 60 ? 'var(--warning)' : 
-                                 'var(--success)'
-                        }}>
-                          {patient.heart_rate || '--'}
-                          {patient.heart_rate && <span style={{ fontSize: '12px', color: 'var(--text-2)', marginLeft: '4px' }}>bpm</span>}
-                        </td>
-                        <td className="numeric" style={{ 
-                          color: patient.oxygen_level < 90 ? 'var(--danger)' : 
-                                 patient.oxygen_level < 95 ? 'var(--warning)' : 
-                                 'var(--success)'
-                        }}>
-                          {patient.oxygen_level || '--'}
-                          {patient.oxygen_level && <span style={{ fontSize: '12px', color: 'var(--text-2)', marginLeft: '1px' }}>%</span>}
-                        </td>
-                        <td style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)' }}>
-                          {patient.last_reading ? new Date(patient.last_reading).toLocaleString() : 'No data'}
-                        </td>
-                        <td>
-                          <span className={`badge badge--${patient.connection_status.toLowerCase() === 'online' ? 'success' : 
-                                                            patient.connection_status.toLowerCase() === 'offline' ? 'danger' : 'warning'}`}>
-                            {patient.connection_status}
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', gap: 'var(--s-1)' }}>
-                            <button 
-                              onClick={() => handleEditPatient(patient)}
-                              className="btn btn--icon"
-                              title="Edit Patient"
-                              style={{ background: 'rgba(95, 114, 144, 0.1)', border: '1px solid rgba(95, 114, 144, 0.2)' }}
-                            >
-                              <span className="material-symbols-rounded" style={{ fontSize: '16px' }}>edit</span>
-                            </button>
-                            <button 
-                              onClick={() => handleDeletePatient(patient)}
-                              className="btn btn--icon"
-                              title="Delete Patient"
-                              style={{ background: 'rgba(211, 107, 107, 0.1)', border: '1px solid rgba(211, 107, 107, 0.2)' }}
-                            >
-                              <span className="material-symbols-rounded" style={{ fontSize: '16px', color: 'var(--danger)' }}>delete</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </>
-        )}
+        <button 
+          onClick={showForm ? () => setShowForm(false) : handleAddPatient} 
+          style={{
+            background: showForm ? '#4B7BE5' : '#28C76F',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '10px 16px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontWeight: 600,
+            gap: '8px'
+          }}
+        >
+          <span className="material-symbols-rounded">{showForm ? 'list' : 'person_add'}</span>
+          {showForm ? 'View Patient List' : 'Add New Patient'}
+        </button>
       </div>
 
-      {/* Patient Form Modal */}
-      {showForm && (
-        <PatientForm
-          patient={editingPatient}
-          onSave={handleSavePatient}
-          onCancel={handleCancelForm}
-          isEditing={!!editingPatient}
-        />
+      {/* Empty State */}
+      {!patients || patients.length === 0 ? (
+        <div style={{ textAlign: 'center', marginTop: '60px', color: '#ccc' }}>
+          <span className="material-symbols-rounded" style={{ fontSize: '48px', color: '#28C76F' }}>group</span>
+          <h3>No Patients Found</h3>
+          <p>Start by adding your first patient to begin monitoring</p>
+          <button 
+            onClick={handleAddPatient}
+            style={{
+              background: '#28C76F',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '10px 16px',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <span className="material-symbols-rounded">person_add</span>
+            Add Your First Patient
+          </button>
+        </div>
+      ) : (
+        <>
+          {showForm ? (
+            <PatientForm
+              patient={editingPatient}
+              onSave={handleSavePatient}
+              onCancel={handleCancelForm}
+              isEditing={!!editingPatient}
+              inline={true}
+            />
+          ) : (
+            <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+              {patients.map(patient => (
+                <div key={patient.patient_id} style={{
+                  background: '#014F36',
+                  borderRadius: '16px',
+                  padding: '20px',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '12px'
+                }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <h3 style={{ margin: 0, color: '#fff' }}>{patient.name}</h3>
+                      <span className={`badge badge--${patient.connection_status.toLowerCase() === 'online' ? 'success' : 'danger'}`}>
+                        {patient.connection_status}
+                      </span>
+                    </div>
+                    <p style={{ margin: '4px 0', color: '#ccc', fontSize: '14px' }}>ID: {patient.patient_id}</p>
+                    <p style={{ margin: '4px 0', color: '#ccc', fontSize: '14px' }}>Age: {patient.age}, Gender: {patient.gender}</p>
+                    <p style={{ margin: '4px 0', color: '#ccc', fontSize: '14px' }}>Conditions: {patient.medical_conditions || 'None'}</p>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>
+                    <div>
+                      <p style={{ margin: '2px 0', fontWeight: '600', color: patient.heart_rate > 100 ? '#FF4C4C' : patient.heart_rate < 60 ? '#FFA500' : '#28C76F' }}>
+                        HR: {patient.heart_rate || '--'} bpm
+                      </p>
+                      <p style={{ margin: '2px 0', fontWeight: '600', color: patient.oxygen_level < 90 ? '#FF4C4C' : patient.oxygen_level < 95 ? '#FFA500' : '#28C76F' }}>
+                        O₂: {patient.oxygen_level || '--'} %
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button onClick={() => handleEditPatient(patient)} style={{
+                        background: 'rgba(95, 114, 144, 0.1)',
+                        border: '1px solid rgba(95, 114, 144, 0.2)',
+                        borderRadius: '8px',
+                        padding: '6px',
+                        cursor: 'pointer'
+                      }}>
+                        <span className="material-symbols-rounded" style={{ fontSize: '16px', color: '#fff' }}>edit</span>
+                      </button>
+                      <button onClick={() => handleDeletePatient(patient)} style={{
+                        background: 'rgba(211, 107, 107, 0.1)',
+                        border: '1px solid rgba(211, 107, 107, 0.2)',
+                        borderRadius: '8px',
+                        padding: '6px',
+                        cursor: 'pointer'
+                      }}>
+                        <span className="material-symbols-rounded" style={{ fontSize: '16px', color: '#FF4C4C' }}>delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h3 style={{ color: 'var(--danger)' }}>
-                <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
-                  warning
-                </span>
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          background: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{ background: '#014F36', borderRadius: '16px', padding: '24px', width: '400px', color: '#fff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ margin: 0, color: '#FF4C4C', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span className="material-symbols-rounded">warning</span>
                 Confirm Delete
               </h3>
-              <button 
-                onClick={() => setDeleteConfirm(null)} 
-                className="btn btn--icon"
-                style={{ background: 'none', border: 'none' }}
-              >
+              <button onClick={() => setDeleteConfirm(null)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
-            <div className="modal-body">
-              <p>
-                Are you sure you want to delete patient <strong>{deleteConfirm.name}</strong> ({deleteConfirm.patient_id})?
-              </p>
-              <div className="alert alert--warning" style={{ margin: 'var(--s-4) 0' }}>
-                This will permanently delete all associated telemetry data and alerts.
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button onClick={() => setDeleteConfirm(null)} className="btn">
-                Cancel
-              </button>
-              <button onClick={confirmDelete} className="btn btn--danger">
+            <p style={{ marginTop: '16px' }}>
+              Are you sure you want to delete <strong>{deleteConfirm.name}</strong> (ID: {deleteConfirm.patient_id})?
+            </p>
+            <p style={{ color: '#FFA500', fontSize: '14px' }}>This will permanently delete all associated telemetry data and alerts.</p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+              <button onClick={() => setDeleteConfirm(null)} style={{ background: '#ccc', border: 'none', borderRadius: '8px', padding: '8px 12px', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={confirmDelete} style={{ background: '#FF4C4C', border: 'none', borderRadius: '8px', padding: '8px 12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <span className="material-symbols-rounded">delete_forever</span>
-                Delete Patient
+                Delete
               </button>
             </div>
           </div>

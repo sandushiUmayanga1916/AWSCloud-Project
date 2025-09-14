@@ -47,267 +47,158 @@ const PatientForm = ({ patient, onSave, onCancel, isEditing = false, inline = fa
     }
   };
 
-  if (inline) {
-    return (
-      <div className="card modal-inline">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--s-4)' }}>
-          <h3 style={{ margin: 0 }}>{isEditing ? 'Edit Patient' : 'Add New Patient'}</h3>
-          <button onClick={onCancel} className="btn btn--icon" style={{ background: 'none', border: 'none' }}>
-            <span className="material-symbols-rounded">close</span>
-          </button>
+  const formStyles = {
+    background: '#014F36',
+    color: '#fff',
+    borderRadius: '16px',
+    padding: '24px',
+    boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+    width: inline ? '100%' : '400px',
+    maxWidth: '100%'
+  };
+
+  const inputStyles = {
+    width: '100%',
+    padding: '10px 12px',
+    borderRadius: '8px',
+    border: '1px solid #28C76F',
+    marginTop: '6px',
+    background: '#013220',
+    color: '#fff'
+  };
+
+  const labelStyles = { marginTop: '12px', display: 'block', fontWeight: '600' };
+
+  const buttonStyles = (bg) => ({
+    background: bg,
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    padding: '10px 16px',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontWeight: 600
+  });
+
+  const content = (
+    <form onSubmit={handleSubmit}>
+      {!isEditing && (
+        <div style={labelStyles}>
+          <label htmlFor="patient_id">Patient ID *</label>
+          <input
+            style={inputStyles}
+            type="text"
+            id="patient_id"
+            name="patient_id"
+            value={formData.patient_id}
+            onChange={handleChange}
+            required
+            placeholder="e.g., P006"
+            pattern="P[0-9]{3,}"
+            title="Patient ID must start with 'P' followed by numbers"
+          />
+        </div>
+      )}
+
+      <div style={labelStyles}>
+        <label htmlFor="name">Full Name *</label>
+        <input
+          style={inputStyles}
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          placeholder="e.g., John Smith"
+        />
+      </div>
+
+      <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+        <div style={{ flex: 1 }}>
+          <label htmlFor="age">Age *</label>
+          <input
+            style={inputStyles}
+            type="number"
+            id="age"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            required
+            min="1"
+            max="120"
+            placeholder="e.g., 45"
+          />
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            {!isEditing && (
-              <div className="form-group">
-                <label htmlFor="patient_id">Patient ID *</label>
-                <input
-                  type="text"
-                  id="patient_id"
-                  name="patient_id"
-                  value={formData.patient_id}
-                  onChange={handleChange}
-                  required
-                  className="input"
-                  placeholder="e.g., P006"
-                  pattern="P[0-9]{3,}"
-                  title="Patient ID must start with 'P' followed by numbers"
-                />
-              </div>
-            )}
-
-            <div className="form-group">
-              <label htmlFor="name">Full Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="input"
-                placeholder="e.g., John Smith"
-              />
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="age">Age *</label>
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  value={formData.age}
-                  onChange={handleChange}
-                  required
-                  min="1"
-                  max="120"
-                  className="input"
-                  placeholder="e.g., 45"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="gender">Gender *</label>
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                  className="input"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="medical_conditions">Medical Conditions</label>
-              <textarea
-                id="medical_conditions"
-                name="medical_conditions"
-                value={formData.medical_conditions}
-                onChange={handleChange}
-                className="input"
-                placeholder="e.g., Hypertension, Diabetes"
-                rows="3"
-                style={{ resize: 'vertical' }}
-              />
-              <small style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)', marginTop: 'var(--s-1)', display: 'block' }}>
-                Separate multiple conditions with commas
-              </small>
-            </div>
-
-            {error && (
-              <div className="alert alert--danger">
-                <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
-                  error
-                </span>
-                {error}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--s-3)', marginTop: 'var(--s-3)' }}>
-              <button type="button" onClick={onCancel} className="btn" disabled={submitting}>Cancel</button>
-              <button type="submit" className="btn btn--primary" disabled={submitting}>
-                {submitting ? (
-                  <>Saving...</>
-                ) : (isEditing ? 'Update Patient' : 'Add Patient')}
-              </button>
-            </div>
-          </div>
-        </form>
+        <div style={{ flex: 1 }}>
+          <label htmlFor="gender">Gender *</label>
+          <select
+            style={inputStyles}
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
-    );
+
+      <div style={labelStyles}>
+        <label htmlFor="medical_conditions">Medical Conditions</label>
+        <textarea
+          style={{ ...inputStyles, resize: 'vertical' }}
+          id="medical_conditions"
+          name="medical_conditions"
+          value={formData.medical_conditions}
+          onChange={handleChange}
+          placeholder="e.g., Hypertension, Diabetes"
+          rows="3"
+        />
+        <small style={{ color: '#ccc' }}>Separate multiple conditions with commas</small>
+      </div>
+
+      {error && (
+        <div style={{ marginTop: '12px', color: '#FF4C4C', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span className="material-symbols-rounded">error</span>
+          {error}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+        <button type="button" style={buttonStyles('#ccc')} onClick={onCancel} disabled={submitting}>Cancel</button>
+        <button type="submit" style={buttonStyles('#28C76F')} disabled={submitting}>
+          <span className="material-symbols-rounded">{isEditing ? 'save' : 'person_add'}</span>
+          {submitting ? 'Saving...' : isEditing ? 'Update Patient' : 'Add Patient'}
+        </button>
+      </div>
+    </form>
+  );
+
+  if (inline) {
+    return <div style={formStyles}>{content}</div>;
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <div className="modal-header">
-          <h3>
-            <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
-              {isEditing ? 'edit' : 'person_add'}
-            </span>
-            {isEditing ? 'Edit Patient' : 'Add New Patient'}
-          </h3>
-          <button onClick={onCancel} className="btn btn--icon" style={{ background: 'none', border: 'none' }}>
-            <span className="material-symbols-rounded">close</span>
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className="modal-body">
-            {!isEditing && (
-              <div className="form-group">
-                <label htmlFor="patient_id">Patient ID *</label>
-                <input
-                  type="text"
-                  id="patient_id"
-                  name="patient_id"
-                  value={formData.patient_id}
-                  onChange={handleChange}
-                  required
-                  className="input"
-                  placeholder="e.g., P006"
-                  pattern="P[0-9]{3,}"
-                  title="Patient ID must start with 'P' followed by numbers"
-                />
-              </div>
-            )}
-
-            <div className="form-group">
-              <label htmlFor="name">Full Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="input"
-                placeholder="e.g., John Smith"
-              />
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="age">Age *</label>
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  value={formData.age}
-                  onChange={handleChange}
-                  required
-                  min="1"
-                  max="120"
-                  className="input"
-                  placeholder="e.g., 45"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="gender">Gender *</label>
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                  className="input"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="medical_conditions">Medical Conditions</label>
-              <textarea
-                id="medical_conditions"
-                name="medical_conditions"
-                value={formData.medical_conditions}
-                onChange={handleChange}
-                className="input"
-                placeholder="e.g., Hypertension, Diabetes"
-                rows="3"
-                style={{ resize: 'vertical' }}
-              />
-              <small style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-2)', marginTop: 'var(--s-1)', display: 'block' }}>
-                Separate multiple conditions with commas
-              </small>
-            </div>
-
-            {error && (
-              <div className="alert alert--danger">
-                <span className="material-symbols-rounded" style={{ verticalAlign: 'middle', marginRight: '8px' }}>
-                  error
-                </span>
-                {error}
-              </div>
-            )}
-          </div>
-
-          <div className="modal-footer">
-            <button 
-              type="button" 
-              onClick={onCancel}
-              className="btn"
-              disabled={submitting}
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              className="btn btn--primary"
-              disabled={submitting}
-            >
-              {submitting ? (
-                <>
-                  <div className="spinner" style={{ width: '16px', height: '16px' }}></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <span className="material-symbols-rounded">
-                    {isEditing ? 'save' : 'person_add'}
-                  </span>
-                  {isEditing ? 'Update Patient' : 'Add Patient'}
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
+    <div style={{
+      position: 'fixed',
+      top: 0, left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'rgba(0,0,0,0.6)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 9999
+    }}>
+      <div style={formStyles}>{content}</div>
     </div>
   );
 };
